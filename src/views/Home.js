@@ -1,36 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import { useStore } from '../store/store'
-import Login from '../components/Login'
-import SignUp from '../components/SignUp'
-import ProductList from './ProductList'
+import { useStore } from "../store/store";
+import Login from "../components/Login";
+import SignUp from "../components/SignUp";
+import ProductList from "./ProductList";
 
-function Home (props) {
-    const user = useStore((state) => state.user)
-    const [active, setActive] = useState(true)
+function Home(props) {
+  const user = useStore((state) => state.user);
+  const [active, setActive] = useState(true);
 
-    return (
+  return (
+    <>
+      {!user ? (
         <>
-        {!user ? (
+          {active ? (
+            <>
+              <Login />
+            </>
+          ) : (
+            <>
+              <SignUp />
+            </>
+          )}
+          <button onClick={setActive(!active)}>
+            {active
+              ? "Don't have an Account yet? Sign up here."
+              : "Already have an account? Go back to Login."}
+          </button>
+        </>
+      ) : (
         <>
-        {active ? (
-            <>
-            <Login />
-            </>
-            ) : (
-            <>
-            <SignUp />
-            </>
-            )}
-        <button onClick={setActive(!active)}>{active? "Don't have an Account yet? Sign up here." : "Already have an account? Go back to Login."}</button>
+          <ProductList />
         </>
-        ) : (
-            <>
-            <ProductList />
-            </>
-        )}
-        </>
-    )
+      )}
+    </>
+  );
 }
 
-export default Home
+export default Home;
