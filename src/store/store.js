@@ -10,12 +10,15 @@ const initialState = {
 
 // set action types
 export const ALLPRODUCTS = "ALLPRODUCTS";
+export const LOGIN = "LOGIN";
 
 // define reducer function
 const reducer = (state, action) => {
   switch (action.type) {
     case ALLPRODUCTS:
       return { products: action.payload };
+    case LOGIN:
+      return { user: action.payload };
     default:
       return state;
   }

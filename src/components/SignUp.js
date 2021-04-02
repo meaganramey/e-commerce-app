@@ -5,7 +5,7 @@ function SignUp (props) {
 
     return (
         <>
-
+        SignUp
         </>
     )
 }

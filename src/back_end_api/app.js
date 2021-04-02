@@ -1,10 +1,13 @@
+require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
+// Express Middleware
+app.use(express.json());
 const db = require("./db.json");
 
 app.get("/", (req, res) => {
@@ -17,18 +20,18 @@ app.get("/products", (req, res) => {
 });
 
 // login api endpoint
-app.post("/users/login", function (req, res) {
+app.post("/auth/login", function (req, res) {
   const { email, password } = req.body;
   const user = db.users.find((user) => user.email === email);
-  const correctPassword = bcrypt.compare(password, user.get("password"));
+  const correctPassword = bcrypt.compare(password, user.password);
   if (user && correctPassword) {
-    const payload = { username: user.get("username") };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const payload = { email: user.email };
+    const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET, {
       expiresIn: "24h",
     });
     res.send({
       token,
-      username: user.get("username"),
+      email: user.email,
       statusCode: res.statusCode,
     });
   } else {
@@ -37,9 +40,8 @@ app.post("/users/login", function (req, res) {
       message: "Invalid username or password",
     });
   }
-  res.status(201).json(user);
+  // res.status(201).json(user);
 });
-
 
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {
