@@ -15,14 +15,20 @@ export const loginRequest = (email, password) => {
   }).then((res) => res.json());
 };
 
-
 export const signUpRequest = (email, password) => {
   return fetch(`${baseUrl}/auth/signup`, {
-    method: 'POST',
-    headers: {"Content-type": 'application/json'},
+    method: "POST",
+    headers: { "Content-type": "application/json" },
     body: JSON.stringify({
       email,
-      password
-    })
-  }).then((res) => res.json())
-}
+      password,
+    }),
+  }).then((res) => res.json());
+};
+
+export const logoutRequest = (token) => {
+  console.log(token);
+  return fetch(`${baseUrl}/auth/logout`, {
+    headers: { Authorization: "Bearer " + token },
+  }).then((res) => res.json());
+};

@@ -8,9 +8,10 @@ const port = 3001;
 
 // Express Middleware
 app.use(express.json());
-// app.use((req, res, next) => {
-//   res.header({"Access-Control-Allow-Origin": "*"})
-// })
+app.use((req, res, next) => {
+  res.header({ "Access-Control-Allow-Origin": "*" });
+  next();
+});
 const db = require("./db.json");
 
 app.get("/", (req, res) => {
@@ -67,6 +68,20 @@ app.post("/auth/signup", async function (req, res) {
     res.status(400).send({
       statusCode: res.statusCode,
       message: "Invalid email or password",
+    });
+  }
+});
+
+app.get("/auth/logout", (req, res) => {
+  // req.logout requires npm i passport
+  // req.logout()
+  console.log(req.headers.authorization);
+  if (!req.headers.authorization) {
+    res.status(400).send("User must first be logged in.");
+  } else {
+    res.status(200).send({
+      statusCode: res.statusCode,
+      message: "Sucessfully logged out.",
     });
   }
 });
