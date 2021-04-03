@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -40,8 +40,14 @@ app.post("/auth/login", function (req, res) {
       message: "Invalid username or password",
     });
   }
-  // res.status(201).json(user);
 });
+
+app.post('/auth/signup', function(req, res) {
+  const {email, password} = req.body
+  console.log(email)
+  console.log(password)
+  
+})
 
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {
