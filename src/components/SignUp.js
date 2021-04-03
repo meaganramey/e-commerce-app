@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-import { loginRequest } from "../fetchRequests";
-import { LOGIN, useStore } from "../store/store";
+import { signUpRequest } from "../fetchRequests";
+import { SIGNUP, useStore } from "../store/store";
 
-function Login(props) {
+function SignUp(props) {
   const dispatch = useStore((state) => state.dispatch);
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const handleLogin = (e) => {
-      e.preventDefault()
-    loginRequest(formData.email, formData.password).then((res) =>
-      dispatch({ type: LOGIN, payload: res })
-    );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signUpRequest(formData.email, formData.password).then((res) => {
+      dispatch({ type: SIGNUP, payload: res });
+    });
   };
 
   const handleChange = (e) => {
@@ -25,28 +24,30 @@ function Login(props) {
 
   return (
     <>
-      <form id="login-form" onSubmit={handleLogin}>
+      <form id="signup-form" onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
           autoFocus
-          type="text"
-          value={formData.email}
-          name="email"
-          onChange={handleChange}
           required
+          type="email"
+          placeholder="example@example.com"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
         />
         <label htmlFor="password">Password</label>
         <input
-          type="password"
-          value={formData.password}
-          name="password"
-          onChange={handleChange}
           required
+          type="password"
+          placeholder="P@$$w0rd"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
         />
-        <button type="submit">Login</button>
+        <button type="submit">Submit</button>
       </form>
     </>
   );
 }
 
-export default Login;
+export default SignUp;
