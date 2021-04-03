@@ -1,9 +1,9 @@
 import React from "react";
-import { useStore } from "../store/store";
+import { UPDATECART, useStore } from "../store/store";
 
 function ProductItem(props) {
   const { cart, dispatch } = useStore((state) => state);
-  const { product } = props.product;
+  const product = props.product;
 
   const addToCart = (product) => {
     const cartCopy = cart;
@@ -12,17 +12,17 @@ function ProductItem(props) {
     } else {
       cartCopy[product.id] = product;
     }
-    if (cartCopy[product.id].amount > product.stock) {
-      cartCopy[product.id].amount = product.stock;
+    if (cartCopy[product.id].amount > product.product.stock) {
+      cartCopy[product.id].amount = product.product.stock;
     }
-    dispatch({ type: ADDTOCART, payload: cartCopy });
+    dispatch({ type: UPDATECART, payload: cartCopy });
   };
 
   return (
     <>
       <div>
         <div>
-          <image scr="" alt={product.shortDesc} width="200px" />
+          <img scr="" alt={product.shortDesc} width="200px" />
         </div>
         <div>
           <b>
@@ -36,7 +36,7 @@ function ProductItem(props) {
           )}
           <div>
             <button
-              onClick={() =>
+              onClick={(e) =>
                 addToCart({
                   id: product.name,
                   product,
