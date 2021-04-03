@@ -11,6 +11,7 @@ const initialState = {
 // set action types
 export const ALLPRODUCTS = "ALLPRODUCTS";
 export const LOGIN = "LOGIN";
+export const SIGNUP = "SIGNUP"
 
 // define reducer function
 const reducer = (state, action) => {
@@ -19,6 +20,8 @@ const reducer = (state, action) => {
       return { products: action.payload };
     case LOGIN:
       return { user: action.payload };
+    case SIGNUP:
+      return { userSignUp: action.payload }
     default:
       return state;
   }

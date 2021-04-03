@@ -8,6 +8,9 @@ const port = 3001;
 
 // Express Middleware
 app.use(express.json());
+// app.use((req, res, next) => {
+//   res.header({"Access-Control-Allow-Origin": "*"})
+// })
 const db = require("./db.json");
 
 app.get("/", (req, res) => {
@@ -23,31 +26,50 @@ app.get("/products", (req, res) => {
 app.post("/auth/login", function (req, res) {
   const { email, password } = req.body;
   const user = db.users.find((user) => user.email === email);
-  const correctPassword = bcrypt.compare(password, user.password);
-  if (user && correctPassword) {
-    const payload = { email: user.email };
-    const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET, {
-      expiresIn: "24h",
-    });
-    res.send({
-      token,
-      email: user.email,
-      statusCode: res.statusCode,
-    });
+  if (user) {
+    const correctPassword = bcrypt.compare(password, user.password);
+    if (user && correctPassword) {
+      const payload = { email: user.email };
+      const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET, {
+        expiresIn: "24h",
+      });
+      res.send({
+        token,
+        email: user.email,
+        statusCode: res.statusCode,
+      });
+    }
   } else {
-    next({
+    res.status(400).send({
       statusCode: 400,
       message: "Invalid username or password",
     });
   }
 });
 
-app.post('/auth/signup', function(req, res) {
-  const {email, password} = req.body
-  console.log(email)
-  console.log(password)
-  
-})
+app.post("/auth/signup", async function (req, res) {
+  const { email, password } = req.body;
+  if (email && password && password.length > 3) {
+    bcryptPassword = await bcrypt.hash(password, 8);
+    newUser = {
+      email: email,
+      password: bcryptPassword,
+      id: Date.now(),
+    };
+    db.users.push(newUser);
+    delete newUser.id;
+    delete newUser.password;
+    res.send({
+      user: newUser,
+      statusCode: res.statusCode,
+    });
+  } else {
+    res.status(400).send({
+      statusCode: res.statusCode,
+      message: "Invalid email or password",
+    });
+  }
+});
 
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {

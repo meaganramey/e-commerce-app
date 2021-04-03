@@ -19,7 +19,7 @@ export const loginRequest = (email, password) => {
 export const signUpRequest = (email, password) => {
   return fetch(`${baseUrl}/auth/signup`, {
     method: 'POST',
-    headers: {"Conent-type": 'application/json'},
+    headers: {"Content-type": 'application/json'},
     body: JSON.stringify({
       email,
       password
