@@ -1,21 +1,45 @@
-import React from "react";
+import React, {useState} from "react";
+import { Redirect } from "react-router";
 import CartItem from "../components/CartItem";
-import { UPDATECART, useStore } from "../store/store";
+import { getAllProductsRequest } from "../fetchRequests";
+import { ALLPRODUCTS, UPDATECART, useStore } from "../store/store";
 
 function Cart(props) {
   const cart = useStore((state) => state.cart);
   const dispatch = useStore((state) => state.dispatch);
-  const cartKeys = Object.keys(cart || {});
+  const user = useStore((state) => state.user)
+  const products = useStore((state) => state.products)
+  const [cartKeys, setCartKeys] = useState(Object.keys(cart || {}));
+  const [redirect, setRedirect] = useState(false)
   const removeFromCart = (productID) => {
-    const cartCopy = cartKeys.filter((item) => item !== productID);
+    let cartCopy = cart
+    const removedItem = cartKeys.filter((item) => item === productID)
+    delete cartCopy[removedItem]
     dispatch({ type: UPDATECART, payload: cartCopy });
+    setCartKeys(cartKeys.filter((item) => item !== productID))
   };
 
   const clearCart = (product) => {
     dispatch({ type: UPDATECART, payload: {} });
   };
 
-  const checkout = () => {};
+  const checkout = () => {
+    if (!user.token){
+      setRedirect(true)
+    }
+    const products = products.map((product) => {
+      if (cart[product.name]){
+        product.stock = product.stock - cart[product.name].stock
+        updateProductRequest(product).then((res) => {
+          dispatch({type: UPDATEPRODUCTQUANTITY, payload: res})
+        })
+      }
+      return product
+    })
+    getAllProductsRequest().then((res) => {
+      dispatch({type: ALLPRODUCTS, payload: res})
+    })
+  };
 
   return (
     <>
@@ -38,6 +62,7 @@ function Cart(props) {
           <div>
             <button onClick={checkout}>Check Out</button>
           </div>
+          {redirect && <Redirect to='/' />}
         </div>
       ) : (
         <div>No items in the cart!</div>
