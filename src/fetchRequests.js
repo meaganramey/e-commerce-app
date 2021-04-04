@@ -37,8 +37,6 @@ export const updateProductRequest = (product) => {
   return fetch(`${baseUrl}/products/${product.id}`, {
     method: "PUT",
     headers: {"Content-type": "application/json"},
-    body: JSON.stringify({
-      ...product
-    })
+    body: product
   }).then((res) => res.json())
 }

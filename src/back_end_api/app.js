@@ -86,6 +86,26 @@ app.get("/auth/logout", (req, res) => {
   }
 });
 
+app.put('/products/:productId', (req, res) => {
+  if (db.products.some((product) => product.id === req.params.productId)){
+    const newProduct = req.body
+    const oldProduct = db[req.params.productId]
+    db[req.params.productId] = newProduct
+    res.status(200).send({
+      statusCode: res.statusCode,
+      db: {
+        oldProduct: oldProduct,
+        newProduct: newProduct
+      }
+    })
+  } else {
+    res.status(400).send({
+      statusCode: res.statusCode,
+      message: `Could not locate product with id of ${req.params.productId}.`
+    })
+  }
+})
+
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {
     res.statusCode = 404;
