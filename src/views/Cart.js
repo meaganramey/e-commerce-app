@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import { Redirect } from "react-router";
 import CartItem from "../components/CartItem";
-import { getAllProductsRequest } from "../fetchRequests";
-import { ALLPRODUCTS, UPDATECART, useStore } from "../store/store";
+import { getAllProductsRequest, updateProductRequest } from "../fetchRequests";
+import { ALLPRODUCTS, UPDATECART, UPDATEPRODUCTQUANTITY, useStore } from "../store/store";
 
 function Cart(props) {
   const cart = useStore((state) => state.cart);
@@ -21,15 +21,17 @@ function Cart(props) {
 
   const clearCart = (product) => {
     dispatch({ type: UPDATECART, payload: {} });
+    setCartKeys([])
   };
 
   const checkout = () => {
     if (!user.token){
       setRedirect(true)
+      return
     }
-    const products = products.map((product) => {
+    const newProducts = products.map((product) => {
       if (cart[product.name]){
-        product.stock = product.stock - cart[product.name].stock
+        product.stock = product.stock - cart[product.name].amount
         updateProductRequest(product).then((res) => {
           dispatch({type: UPDATEPRODUCTQUANTITY, payload: res})
         })
