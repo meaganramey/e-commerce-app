@@ -99,9 +99,12 @@ app.get("/auth/logout", (req, res) => {
 
 app.put("/products/:productId", (req, res) => {
   if (db.products.some((product) => product.id === req.params.productId)) {
-    const newProduct = req.body;
-    const oldProduct = db[req.params.productId];
-    db[req.params.productId] = newProduct;
+    const replacement = db.products.findIndex(
+      (p) => p.id === req.params.productId
+    );
+    const newProduct = req.body.product;
+    const oldProduct = db.products[req.params.productId];
+    db.products[replacement] = newProduct;
     res.status(200).send({
       statusCode: res.statusCode,
       db: {
