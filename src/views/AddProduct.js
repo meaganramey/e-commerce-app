@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+import {addProductRequest} from '../fetchRequests'
+import {ADDAPRODUCT, useStore} from '../store/store'
 
 
 function AddProduct (props) {
@@ -9,9 +11,12 @@ function AddProduct (props) {
         shortDesc: "",
         description: ''
     })
+    const dispatch = useStore((state) => state.dispatch)
+    const user = useStore((state) => state.user)
 
-    const saveProduct = () => {
-        
+    const saveProduct = (e) => {
+        e.preventDefault()
+        addProductRequest(formData, user.token).then((res) => dispatch({type: ADDAPRODUCT, payload: res}))
     }
 
 

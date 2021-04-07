@@ -41,3 +41,12 @@ export const updateProductRequest = (product) => {
     }),
   }).then((res) => res.json());
 };
+
+
+export const addProductRequest = (product, token) => {
+  return fetch(`${baseUrl}/products/add`, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token},
+    body: JSON.stringify(product)
+  }).then((res) => res.json())
+}

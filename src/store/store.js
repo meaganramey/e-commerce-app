@@ -15,6 +15,7 @@ export const SIGNUP = "SIGNUP";
 export const LOGOUT = "LOGOUT";
 export const UPDATECART = "ADDTOCART";
 export const UPDATEPRODUCTQUANTITY = "UPDATEPRODUCTQUANTITY";
+export const ADDAPRODUCT = "ADDAPRODUCT";
 
 // define reducer function
 const reducer = (state, action) => {
@@ -31,6 +32,8 @@ const reducer = (state, action) => {
       return { cart: action.payload };
     case UPDATEPRODUCTQUANTITY:
       return { updateQuantity: action.payload };
+    case ADDAPRODUCT:
+      return { addProductResponse: action.payload };
     default:
       return state;
   }
