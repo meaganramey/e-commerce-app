@@ -20,8 +20,8 @@ function Cart(props) {
   };
 
   const clearCart = (product) => {
-    dispatch({ type: UPDATECART, payload: {} });
     setCartKeys([])
+    dispatch({ type: UPDATECART, payload: {} });
   };
 
   const checkout = () => {
@@ -30,6 +30,7 @@ function Cart(props) {
       return
     }
     const newProducts = products.map((product) => {
+      console.log("In the product map")
       if (cart[product.name]){
         product.stock = product.stock - cart[product.name].amount
         updateProductRequest(product).then((res) => {
@@ -40,6 +41,7 @@ function Cart(props) {
     })
     getAllProductsRequest().then((res) => {
       dispatch({type: ALLPRODUCTS, payload: res})
+      clearCart()
     })
   };
 
