@@ -10,11 +10,16 @@ const port = 3001;
 app.use(express.json());
 app.use((req, res, next) => {
   res.header({ "Access-Control-Allow-Origin": "*" });
-  res.header({"Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE"})
-  res.header({"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"})
+  res.header({
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+  });
+  res.header({
+    "Access-Control-Allow-Headers":
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  });
   // res.header({"Access-Control-Allow-Preflight": "false"})
-  if (req.method == "OPTIONS"){
-    res.sendStatus(200)
+  if (req.method == "OPTIONS") {
+    res.sendStatus(200);
   }
   next();
 });
@@ -92,25 +97,25 @@ app.get("/auth/logout", (req, res) => {
   }
 });
 
-app.put('/products/:productId', (req, res) => {
-  if (db.products.some((product) => product.id === req.params.productId)){
-    const newProduct = req.body
-    const oldProduct = db[req.params.productId]
-    db[req.params.productId] = newProduct
+app.put("/products/:productId", (req, res) => {
+  if (db.products.some((product) => product.id === req.params.productId)) {
+    const newProduct = req.body;
+    const oldProduct = db[req.params.productId];
+    db[req.params.productId] = newProduct;
     res.status(200).send({
       statusCode: res.statusCode,
       db: {
         oldProduct: oldProduct,
-        newProduct: newProduct
-      }
-    })
+        newProduct: newProduct,
+      },
+    });
   } else {
     res.status(400).send({
       statusCode: res.statusCode,
-      message: `Could not locate product with id of ${req.params.productId}.`
-    })
+      message: `Could not locate product with id of ${req.params.productId}.`,
+    });
   }
-})
+});
 
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {
@@ -131,11 +136,11 @@ app.post("/scores", function (req, res) {
 });
 
 app.get("*", (req, res) => {
-  res.sendStatus(404)
-})
+  res.sendStatus(404);
+});
 
-app.use(function(req, res) {
-  res.status(404).send('404: Page not Found');
+app.use(function (req, res) {
+  res.status(404).send("404: Page not Found");
 });
 
 app.listen(port, () => {

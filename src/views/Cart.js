@@ -1,48 +1,53 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router";
 import CartItem from "../components/CartItem";
 import { getAllProductsRequest, updateProductRequest } from "../fetchRequests";
-import { ALLPRODUCTS, UPDATECART, UPDATEPRODUCTQUANTITY, useStore } from "../store/store";
+import {
+  ALLPRODUCTS,
+  UPDATECART,
+  UPDATEPRODUCTQUANTITY,
+  useStore,
+} from "../store/store";
 
 function Cart(props) {
   const cart = useStore((state) => state.cart);
   const dispatch = useStore((state) => state.dispatch);
-  const user = useStore((state) => state.user)
-  const products = useStore((state) => state.products)
+  const user = useStore((state) => state.user);
+  const products = useStore((state) => state.products);
   const [cartKeys, setCartKeys] = useState(Object.keys(cart || {}));
-  const [redirect, setRedirect] = useState(false)
+  const [redirect, setRedirect] = useState(false);
   const removeFromCart = (productID) => {
-    let cartCopy = cart
-    const removedItem = cartKeys.filter((item) => item === productID)
-    delete cartCopy[removedItem]
+    let cartCopy = cart;
+    const removedItem = cartKeys.filter((item) => item === productID);
+    delete cartCopy[removedItem];
     dispatch({ type: UPDATECART, payload: cartCopy });
-    setCartKeys(cartKeys.filter((item) => item !== productID))
+    setCartKeys(cartKeys.filter((item) => item !== productID));
   };
 
   const clearCart = (product) => {
-    setCartKeys([])
+    setCartKeys([]);
     dispatch({ type: UPDATECART, payload: {} });
   };
 
   const checkout = () => {
-    if (!user.token){
-      setRedirect(true)
-      return
+    if (!user.token) {
+      setRedirect(true);
+      return;
     }
     const newProducts = products.map((product) => {
-      console.log("In the product map")
-      if (cart[product.name]){
-        product.stock = product.stock - cart[product.name].amount
+      console.log("In the product map");
+      if (cart[product.name]) {
+        product.stock = product.stock - cart[product.name].amount;
         updateProductRequest(product).then((res) => {
-          dispatch({type: UPDATEPRODUCTQUANTITY, payload: res})
-        })
+          dispatch({ type: UPDATEPRODUCTQUANTITY, payload: res });
+        });
       }
-      return product
-    })
+      return product;
+    });
     getAllProductsRequest().then((res) => {
-      dispatch({type: ALLPRODUCTS, payload: res})
-      clearCart()
-    })
+      dispatch({ type: ALLPRODUCTS, payload: res });
+      clearCart();
+    });
   };
 
   return (
@@ -66,7 +71,7 @@ function Cart(props) {
           <div>
             <button onClick={checkout}>Check Out</button>
           </div>
-          {redirect && <Redirect to='/' />}
+          {redirect && <Redirect to="/" />}
         </div>
       ) : (
         <div>No items in the cart!</div>
