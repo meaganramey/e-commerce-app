@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./assets/index.css";
 import App from "./App";
+import 'fontsource-roboto';
 
 import { BrowserRouter } from "react-router-dom";
 

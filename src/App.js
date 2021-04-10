@@ -6,8 +6,9 @@ import Cart from "./views/Cart";
 import Home from "./views/Home";
 import ProductList from "./views/ProductList";
 import AddProduct from './views/AddProduct'
+import AuthView from './views/Auth'
 
-function App() {
+function App(props) {
   return (
     <>
       <NavBar />
@@ -16,6 +17,8 @@ function App() {
         <Route exact path="/products" component={ProductList} />
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/add-product" component={AddProduct} />
+        <Route path="/login" component={AuthView} />
+        <Route path="/signup" component={AuthView} />
       </Switch>
     </>
   );
