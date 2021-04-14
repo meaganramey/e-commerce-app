@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -7,8 +8,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { signUpRequest } from "../fetchRequests";
-import { SIGNUP, useStore } from "../store/store";
+import { loginRequest, signUpRequest } from "../fetchRequests";
+import { LOGIN, SIGNUP, useStore } from "../store/store";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -23,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
 function SignUp(props) {
   const classes = useStyles();
 
+  const history = useHistory()
+
   const dispatch = useStore((state) => state.dispatch);
   const [formData, setFormData] = useState({
     email: "",
@@ -33,6 +36,11 @@ function SignUp(props) {
     e.preventDefault();
     signUpRequest(formData.email, formData.password).then((res) => {
       dispatch({ type: SIGNUP, payload: res });
+      if (res.statusCode === 200){
+        loginRequest(formData.email, formData.password).then((res) => {
+          dispatch({ type: LOGIN, payload: res})
+        }).then(() => history.push('/'))
+      }
     });
   };
 

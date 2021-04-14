@@ -72,13 +72,11 @@ function NavBar(props) {
             aria-label="menu"
           >
             <div>
-              <Button
+              <MenuIcon
                 aria-controls="simple-menu"
                 aria-haspopup="true"
                 onClick={handleClick}
-              >
-                <MenuIcon />
-              </Button>
+              />
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
