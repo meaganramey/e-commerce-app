@@ -10,6 +10,17 @@ const port = 3001;
 app.use(express.json());
 app.use((req, res, next) => {
   res.header({ "Access-Control-Allow-Origin": "*" });
+  res.header({
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+  });
+  res.header({
+    "Access-Control-Allow-Headers":
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  });
+  // res.header({"Access-Control-Allow-Preflight": "false"})
+  if (req.method == "OPTIONS") {
+    res.sendStatus(200);
+  }
   next();
 });
 const db = require("./db.json");
@@ -86,6 +97,29 @@ app.get("/auth/logout", (req, res) => {
   }
 });
 
+app.put("/products/:productId", (req, res) => {
+  if (db.products.some((product) => product.id === req.params.productId)) {
+    const replacement = db.products.findIndex(
+      (p) => p.id === req.params.productId
+    );
+    const newProduct = req.body.product;
+    const oldProduct = db.products[req.params.productId];
+    db.products[replacement] = newProduct;
+    res.status(200).send({
+      statusCode: res.statusCode,
+      db: {
+        oldProduct: oldProduct,
+        newProduct: newProduct,
+      },
+    });
+  } else {
+    res.status(400).send({
+      statusCode: res.statusCode,
+      message: `Could not locate product with id of ${req.params.productId}.`,
+    });
+  }
+});
+
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {
     res.statusCode = 404;
@@ -102,6 +136,14 @@ app.post("/scores", function (req, res) {
   scores.push(req.body);
   scores = scores.sort((a, b) => b.score - a.score).slice(0, 3);
   res.status(201).json(scores);
+});
+
+app.get("*", (req, res) => {
+  res.sendStatus(404);
+});
+
+app.use(function (req, res) {
+  res.status(404).send("404: Page not Found");
 });
 
 app.listen(port, () => {

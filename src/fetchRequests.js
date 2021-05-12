@@ -27,8 +27,17 @@ export const signUpRequest = (email, password) => {
 };
 
 export const logoutRequest = (token) => {
-  console.log(token);
   return fetch(`${baseUrl}/auth/logout`, {
     headers: { Authorization: "Bearer " + token },
+  }).then((res) => res.json());
+};
+
+export const updateProductRequest = (product) => {
+  return fetch(`${baseUrl}/products/${product.id}`, {
+    method: "PUT",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({
+      product,
+    }),
   }).then((res) => res.json());
 };

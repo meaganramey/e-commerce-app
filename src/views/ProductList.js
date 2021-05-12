@@ -17,7 +17,7 @@ function ProductList(props) {
   return (
     <>
       {products.map((product) => (
-        <ProductItem product={product} />
+        <ProductItem key={product.id} product={product} />
       ))}
     </>
   );

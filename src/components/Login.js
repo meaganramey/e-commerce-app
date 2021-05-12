@@ -11,7 +11,7 @@ function Login(props) {
   });
 
   const handleLogin = (e) => {
-      e.preventDefault()
+    e.preventDefault();
     loginRequest(formData.email, formData.password).then((res) =>
       dispatch({ type: LOGIN, payload: res })
     );
