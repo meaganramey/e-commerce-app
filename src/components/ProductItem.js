@@ -118,6 +118,7 @@ function ProductItem(props) {
           >
             <AddShoppingCartIcon />
           </IconButton>
+            <Typography variant="caption">More about {product.name}:</Typography>
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,
@@ -131,7 +132,6 @@ function ProductItem(props) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>More about {product.name}:</Typography>
             <Typography paragraph>{product.description}</Typography>
           </CardContent>
         </Collapse>

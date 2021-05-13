@@ -63,7 +63,7 @@ function NavBar(props) {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" style={{ marginBottom: 30}}>
         <Toolbar>
           <IconButton
             edge="start"
