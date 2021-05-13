@@ -120,6 +120,33 @@ app.put("/products/:productId", (req, res) => {
   }
 });
 
+app.post('/products/add', (req,res)=> {
+  console.log(req.body)
+  const { name, stock, price, shortDesc, description } = req.body
+  if ( name && shortDesc && description && Number(stock) > 0 && Number(price) > 0) {
+    newProduct = {
+      id: Date.now(),
+      name: name,
+      shortDesc: shortDesc,
+      description: description, 
+      stock: stock,
+      price: price
+    }
+    db.products.push(newProduct)
+    delete newProduct.id
+    res.status(202).send({
+      statusCode: res.statusCode,
+      message: `Sucessfully added the following product to the database: ${newProduct}`
+    })
+  } else {
+    res.status(400).send({
+      statusCode: res.statusCode,
+      message: "Please be sure to include a name, short description, and long description, and that the stock and prices are greater than 0."
+    })
+  }
+})
+
+
 app.get("/scores", (req, res) => {
   if (req.url === undefined) {
     res.statusCode = 404;
