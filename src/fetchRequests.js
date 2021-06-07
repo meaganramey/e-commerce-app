@@ -46,7 +46,7 @@ export const updateProductRequest = (product) => {
 export const addProductRequest = (product, token) => {
   return fetch(`${baseUrl}/products/add`, {
     method: "POST",
-    headers: { Authorization: "Bearer " + token},
-    body: JSON.stringify(product)
+    headers: { Authorization: "Bearer " + token, "Content-type": "application/json"},
+    body: JSON.stringify({...product})
   }).then((res) => res.json())
 }
