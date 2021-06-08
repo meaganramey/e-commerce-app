@@ -13,18 +13,105 @@ import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
+import { red, grey } from "@material-ui/core/colors";
+import TextField from "@material-ui/core/TextField";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
-import TextField from "@material-ui/core/TextField";
+import bag from "../assets/bag.jpeg";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
+  addproduct: {
+    maxWidth: "70vw",
+    margin: "0 auto",
+    backgroundColor: grey[100],
+    marginBottom: '10rem',
+    "& > *": {
+      margin: theme.spacing(3),
+      // width: "50ch",
+    },
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+      maxWidth: "90vw",
+    },
+  },
+  addProductTitleBox: {
+    display: "flex",
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+      flexDirection: "column",
+      alignItems: "center",
+      // width: '90%'
+      marginBottom: "-15%"
+    },
+  },
+  addProductTitleDiv: {
+    width: "40%",
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+      width: "90%",
+      textAlign: "center"
+    },
+  },
+  addImage: {
+    border: "2px black dashed",
+    margin: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+    },
+  },
+  imageIcon: {
+    height: "80%",
+    width: "80%",
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+    },
+  },
+  productDetails: {
+    width: "50%",
+    "& > *": {
+      width: "110%",
+      paddingBottom: '2rem',
+    },
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+      width: "90%",
+      "& > *": {
+        width: "100%",
+        paddingBottom: '2rem',
+      },
+    },
+  },
+  productDescription: {
+    width: "80%",
+    [theme.breakpoints.down('sm')]: {
+      // backgroundColor: theme.palette.secondary.main,
+      "& > *": {
+        "& > *": {
+          width: "96%",
+          paddingBottom: '1rem',
+        },
+      },
+    },
+    "& > *": {
+      "& > *": {
+        width: "96%",
+        paddingBottom: '1rem',
+      },
+    },
+  },
   root: {
-    maxWidth: 345,
+    maxWidth: 500,
+    margin: "0 auto",
+    alignContent: "space-around",
     "& > *": {
       margin: theme.spacing(1),
       width: "25ch",
@@ -57,8 +144,13 @@ function AddProduct(props) {
     shortDesc: "",
     description: "",
   });
+  const [expanded, setExpanded] = useState(false);
+  const [previewProduct, setPreviewProduct] = useState(false);
+
   const dispatch = useStore((state) => state.dispatch);
   const user = useStore((state) => state.user);
+
+  const classes = useStyles();
 
   const saveProduct = (e) => {
     e.preventDefault();
@@ -73,198 +165,181 @@ function AddProduct(props) {
     setFormData((state) => ({ ...state, [inputName]: inputValue }));
   };
 
-  const classes = useStyles();
-
-  const { cart } = useStore((state) => state);
-  const product = {
-    id: "hdmdu0t80yjkfqselfc",
-    name: "shoes",
-    stock: 10,
-    price: 399.99,
-    shortDesc: "Nulla facilisi. Curabitur at lacus ac velit ornare lobortis.",
-    description:
-      "Cras sagittis. Praesent nec nisl a purus blandit viverra. Ut leo. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Fusce a quam.",
-  };
-
-  const addToCart = (product) => {
-    const cartCopy = cart;
-    if (cartCopy[product.id]) {
-      cartCopy[product.id].amount += product.amount;
-    } else {
-      cartCopy[product.id] = product;
-    }
-    if (cartCopy[product.id].amount > product.product.stock) {
-      cartCopy[product.id].amount = product.product.stock;
-    }
-    dispatch({ type: UPDATECART, payload: cartCopy });
-  };
-
-  const [expanded, setExpanded] = React.useState(false);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   return (
     <>
-      <h4>AddProduct</h4>
-      <form onSubmit={saveProduct}>
-        <div>
-          <label htmlFor="name">Product Name :</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="price">Price :</label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="stock">Available in Stock :</label>
-          <input
-            type="number"
-            name="stock"
-            value={formData.stock}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="shortdesc">Short Description :</label>
-          <input
-            type="text"
-            name="shortDesc"
-            value={formData.shortDesc}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="description">Description :</label>
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Submit Product</button>
-      </form>
+      {!previewProduct ? (
+        <>
+          <Card className={classes.addproduct}>
+            <Box className={classes.addProductTitleBox}>
+              <CardContent className={classes.addProductTitleDiv}>
+                <CardHeader title="Add Product" />
+                <CardContent className={classes.addImage}>
+                  <AddCircleIcon className={classes.imageIcon} />
 
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField id="standard-basic" label="Standard" />
-        <TextField id="filled-basic" label="Filled" variant="filled" />
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-      </form>
-      <Card className={classes.root}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {formData.name.slice(0, 1).toUpperCase()}
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={
-            <TextField
-              id="filled-basic"
-              label="Product Name"
-              variant="filled"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          }
-          subheader={
-            <TextField
-              id="filled-basic"
-              label="Product Price"
-              variant="filled"
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-            />
-          }
-        />
-        <CardMedia
-          className={classes.media}
-          image="/static/images/cards/paella.jpg"
-          alt={product.shortDesc}
-        />
-        <CardContent>
-          {
-            <TextField
-              id="filled-basic"
-              label="Stock"
-              variant="filled"
-              type="number"
-              name="stock"
-              value={formData.stock}
-              onChange={handleChange}
-            />
-          }
-          <Typography variant="body2" color="textSecondary" component="p">
-            {
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Add image
+                  </Typography>
+                </CardContent>
+              </CardContent>
+              <CardContent className={classes.productDetails}>
+                <TextField
+                  id="filled-basic"
+                  label="Product Name"
+                  variant="outlined"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  id="filled-basic"
+                  label="Product Price"
+                  variant="outlined"
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                />
+                <TextField
+                  id="filled-basic"
+                  label="Stock"
+                  variant="outlined"
+                  type="number"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                />
+              </CardContent>
+            </Box>
+            <CardContent className={classes.productDescription}>
+
+            <Typography variant="body2" color="textSecondary" component="p">
               <TextField
                 id="filled-basic"
                 label="Short Description"
-                variant="filled"
+                variant="outlined"
                 name="shortDesc"
                 value={formData.shortDesc}
                 onChange={handleChange}
               />
-            }
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton
-            aria-label="add to cart"
-            onClick={(e) =>
-              addToCart({
-                id: product.name,
-                product,
-                amount: 1,
-              })
-            }
-          >
-            <AddShoppingCartIcon />
-          </IconButton>
-          <Typography variant="caption">More about {product.name}:</Typography>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>{product.description}</Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              <TextField
+                id="filled-basic"
+                label="Long Description"
+                variant="outlined"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </Typography>
+            </CardContent>
+          </Card>
+        </>
+      ) : (
+        <>
+          <h4>Preview Product</h4>
+          <Card className={classes.root}>
+            <CardHeader
+              avatar={
+                <Avatar aria-label="recipe" className={classes.avatar}>
+                  {formData.name.slice(0, 1).toUpperCase()}
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={
+                <TextField
+                  id="filled-basic"
+                  label="Product Name"
+                  variant="outlined"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              }
+              subheader={
+                <TextField
+                  id="filled-basic"
+                  label="Product Price"
+                  variant="outlined"
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                />
+              }
+            />
+            <CardMedia
+              className={classes.media}
+              image="/static/images/cards/paella.jpg"
+              alt={formData.shortDesc}
+            />
+            <CardContent>
+              {
+                <TextField
+                  id="filled-basic"
+                  label="Stock"
+                  variant="outlined"
+                  type="number"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                />
+              }
+              <Typography variant="body2" color="textSecondary" component="p">
+                {
+                  <TextField
+                    id="filled-basic"
+                    label="Short Description"
+                    variant="outlined"
+                    name="shortDesc"
+                    value={formData.shortDesc}
+                    onChange={handleChange}
+                  />
+                }
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+              <IconButton aria-label="add to favorites">
+                <FavoriteIcon />
+              </IconButton>
+              <IconButton aria-label="add to cart">
+                <AddShoppingCartIcon />
+              </IconButton>
+              <Typography variant="caption">
+                More about {formData.name}:
+              </Typography>
+              <IconButton
+                className={clsx(classes.expand, {
+                  [classes.expandOpen]: expanded,
+                })}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <CardContent>
+                <Typography paragraph>{formData.description}</Typography>
+              </CardContent>
+            </Collapse>
+          </Card>
+        </>
+      )}
     </>
   );
 }
