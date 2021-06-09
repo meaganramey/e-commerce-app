@@ -35,6 +35,8 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary,
     "& > * + *": {
       marginLeft: theme.spacing(2),
     },
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
     width: 400,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.primary.dark,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
@@ -131,7 +133,7 @@ function NavBar(props) {
 
   return (
     <>
-      <AppBar position="static" style={{ marginBottom: 30 }}>
+      <AppBar position="static" style={{ marginBottom: 30 }} className={classes.root}>
         <Toolbar>
           <IconButton
             edge="start"

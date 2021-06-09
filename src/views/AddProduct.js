@@ -13,7 +13,7 @@ import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red, grey } from "@material-ui/core/colors";
+import { red, grey, deepPurple, purple, blueGrey } from "@material-ui/core/colors";
 import TextField from "@material-ui/core/TextField";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -26,86 +26,79 @@ import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   addproduct: {
-    maxWidth: "70vw",
-    margin: "0 auto",
-    backgroundColor: grey[100],
-    marginBottom: '10rem',
-    "& > *": {
-      margin: theme.spacing(3),
-      // width: "50ch",
-    },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.up("xs")]: {
       // backgroundColor: theme.palette.secondary.main,
       maxWidth: "90vw",
+      margin: "0 auto",
+      marginBottom: "10vh",
+      backgroundColor: theme.palette.secondary.main,
+    },
+    [theme.breakpoints.up("sm")]: {
+      maxWidth: "70vw",
+      // backgroundColor: theme.palette.primary.main,
+    },
+    [theme.breakpoints.up("md")]: {
+      // backgroundColor: theme.palette.success.main,
+      maxWidth: "750px"
     },
   },
   addProductTitleBox: {
-    display: "flex",
-    [theme.breakpoints.down('sm')]: {
-      // backgroundColor: theme.palette.secondary.main,
+    [theme.breakpoints.up("xs")]: {
+      display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      // width: '90%'
-      marginBottom: "-15%"
+    },
+    [theme.breakpoints.up("md")]: {
+      flexDirection: 'row',
+      alignItems: "flex-start",
     },
   },
   addProductTitleDiv: {
-    width: "40%",
-    [theme.breakpoints.down('sm')]: {
-      // backgroundColor: theme.palette.secondary.main,
+    [theme.breakpoints.up("xs")]: {
       width: "90%",
-      textAlign: "center"
+      textAlign: "center",
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: "80%",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "40%"
     },
   },
   addImage: {
-    border: "2px black dashed",
-    margin: "1rem",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    [theme.breakpoints.down('sm')]: {
-      // backgroundColor: theme.palette.secondary.main,
+    [theme.breakpoints.up("xs")]: {
+      border: "2px black dashed",
+      margin: "1rem",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
     },
   },
   imageIcon: {
-    height: "80%",
-    width: "80%",
-    [theme.breakpoints.down('sm')]: {
-      // backgroundColor: theme.palette.secondary.main,
+    [theme.breakpoints.up("xs")]: {
+      height: "60%",
+      width: "60%",
     },
   },
   productDetails: {
-    width: "50%",
-    "& > *": {
-      width: "110%",
-      paddingBottom: '2rem',
-    },
-    [theme.breakpoints.down('sm')]: {
-      // backgroundColor: theme.palette.secondary.main,
+    [theme.breakpoints.up("xs")]: {
       width: "90%",
+      marginBottom: '-1rem',
       "& > *": {
         width: "100%",
-        paddingBottom: '2rem',
+        marginBottom: "2rem",
       },
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "50%",
+      marginTop: "8%"
     },
   },
   productDescription: {
-    width: "80%",
-    [theme.breakpoints.down('sm')]: {
-      // backgroundColor: theme.palette.secondary.main,
-      "& > *": {
-        "& > *": {
-          width: "96%",
-          paddingBottom: '1rem',
-        },
-      },
-    },
-    "& > *": {
-      "& > *": {
-        width: "96%",
-        paddingBottom: '1rem',
-      },
+    [theme.breakpoints.up("md")]: {
+      marginLeft: "-85%",
+      width: "185%"
     },
   },
   root: {
@@ -217,31 +210,26 @@ function AddProduct(props) {
                   value={formData.stock}
                   onChange={handleChange}
                 />
+                <TextField
+                  className={classes.productDescription}
+                  id="filled-basic"
+                  label="Short Description"
+                  variant="outlined"
+                  name="shortDesc"
+                  value={formData.shortDesc}
+                  onChange={handleChange}
+                />
+                <TextField
+                  className={classes.productDescription}
+                  id="filled-basic"
+                  label="Long Description"
+                  variant="outlined"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
               </CardContent>
             </Box>
-            <CardContent className={classes.productDescription}>
-
-            <Typography variant="body2" color="textSecondary" component="p">
-              <TextField
-                id="filled-basic"
-                label="Short Description"
-                variant="outlined"
-                name="shortDesc"
-                value={formData.shortDesc}
-                onChange={handleChange}
-              />
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              <TextField
-                id="filled-basic"
-                label="Long Description"
-                variant="outlined"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-              />
-            </Typography>
-            </CardContent>
           </Card>
         </>
       ) : (
