@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.js": "/e-commerce-app/static/js/main.a1d00f77.chunk.js",
+    "main.js.map": "/e-commerce-app/static/js/main.a1d00f77.chunk.js.map",
+    "runtime-main.js": "/e-commerce-app/static/js/runtime-main.8cb08b4a.js",
+    "runtime-main.js.map": "/e-commerce-app/static/js/runtime-main.8cb08b4a.js.map",
+    "static/js/2.ccb6959d.chunk.js": "/e-commerce-app/static/js/2.ccb6959d.chunk.js",
+    "static/js/2.ccb6959d.chunk.js.map": "/e-commerce-app/static/js/2.ccb6959d.chunk.js.map",
+    "index.html": "/e-commerce-app/index.html",
+    "static/js/2.ccb6959d.chunk.js.LICENSE.txt": "/e-commerce-app/static/js/2.ccb6959d.chunk.js.LICENSE.txt",
+    "static/media/bag.59fadb84.jpeg": "/e-commerce-app/static/media/bag.59fadb84.jpeg",
+    "static/media/shoe.c6f373c9.png": "/e-commerce-app/static/media/shoe.c6f373c9.png",
+    "static/media/shorts.d8063a6c.png": "/e-commerce-app/static/media/shorts.d8063a6c.png",
+    "static/media/temp_image.2f749ec7.jpeg": "/e-commerce-app/static/media/temp_image.2f749ec7.jpeg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8cb08b4a.js",
+    "static/js/2.ccb6959d.chunk.js",
+    "static/js/main.a1d00f77.chunk.js"
+  ]
+}
