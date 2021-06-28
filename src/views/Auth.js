@@ -2,7 +2,6 @@ import React from "react";
 import { useHistory, Link as RouterLink } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -13,6 +12,11 @@ import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: "white",
+    borderRadius: "5%",
+    padding: "1em",
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -33,8 +37,7 @@ function AuthView(props) {
 
   return (
     <>
-      <Container maxWidth="xs">
-        <CssBaseline />
+      <Container maxWidth="xs" className={classes.root}>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

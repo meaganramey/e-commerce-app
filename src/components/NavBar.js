@@ -17,25 +17,10 @@ import Red from "@material-ui/core/colors/red";
 import { logoutRequest } from "../fetchRequests";
 import { LOGOUT, useStore } from "../store/store";
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary,
     "& > * + *": {
       marginLeft: theme.spacing(2),
@@ -50,16 +35,23 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
     width: 400,
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.light,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
   good: {
     backgroundColor: Green[300],
   },
   bad: {
     backgroundColor: Red[300],
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "space-around",
   },
 }));
 
@@ -86,7 +78,9 @@ function NavBar(props) {
     logoutRequest(user.token).then(() => {
       console.log("after the logout request");
       dispatch({ type: LOGOUT });
+      localStorage.clear();
       handleCloseModal();
+      handleClose();
     });
     // }
   };
@@ -96,9 +90,7 @@ function NavBar(props) {
     handleClose();
   };
 
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -109,31 +101,37 @@ function NavBar(props) {
   };
 
   const body = (
-    <div style={modalStyle} className={classes.paper}>
+    <div className={classes.paper}>
       <h2 id="simple-modal-title">Are you sure you sure you want to logout?</h2>
-      <Button
-        id="simple-modal-confirm-logout"
-        className={classes.bad}
-        component={RouterLink}
-        to="/"
-        onClick={handleLogout}
-      >
-        Logout
-      </Button>
+      <div className={classes.buttons}>
+        <Button
+          id="simple-modal-confirm-logout"
+          className={classes.bad}
+          component={RouterLink}
+          to="/"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
 
-      <Button
-        id="simple-modal-confirm-logout"
-        className={classes.good}
-        onClick={handleCloseModal}
-      >
-        Go Back
-      </Button>
+        <Button
+          id="simple-modal-confirm-logout"
+          className={classes.good}
+          onClick={handleCloseModal}
+        >
+          Go Back
+        </Button>
+      </div>
     </div>
   );
 
   return (
     <>
-      <AppBar position="static" style={{ marginBottom: 30 }} className={classes.root}>
+      <AppBar
+        position="static"
+        style={{ marginBottom: 30 }}
+        className={classes.root}
+      >
         <Toolbar>
           <IconButton
             edge="start"

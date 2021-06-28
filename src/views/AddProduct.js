@@ -1,27 +1,19 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 import { addProductRequest } from "../fetchRequests";
-import { ADDAPRODUCT, UPDATECART, useStore } from "../store/store";
+import { ADDAPRODUCT, useStore } from "../store/store";
+import ProductItem from "../components/ProductItem";
 
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red, grey, deepPurple, purple, blueGrey } from "@material-ui/core/colors";
+import { red } from "@material-ui/core/colors";
 import TextField from "@material-ui/core/TextField";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-
-import bag from "../assets/bag.jpeg";
 import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "90vw",
       margin: "0 auto",
       marginBottom: "10vh",
-      backgroundColor: theme.palette.secondary.main,
     },
     [theme.breakpoints.up("sm")]: {
       maxWidth: "70vw",
@@ -39,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up("md")]: {
       // backgroundColor: theme.palette.success.main,
-      maxWidth: "750px"
+      maxWidth: "750px",
     },
   },
   addProductTitleBox: {
@@ -49,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
     [theme.breakpoints.up("md")]: {
-      flexDirection: 'row',
+      flexDirection: "row",
       alignItems: "flex-start",
     },
   },
@@ -62,17 +53,18 @@ const useStyles = makeStyles((theme) => ({
       width: "80%",
     },
     [theme.breakpoints.up("md")]: {
-      width: "40%"
+      width: "40%",
     },
   },
   addImage: {
     [theme.breakpoints.up("xs")]: {
-      border: "2px black dashed",
+      border: `2px ${theme.palette.primary.dark} dashed`,
       margin: "1rem",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
+      // backgroundColor: theme.palette.secondary.main,
     },
   },
   imageIcon: {
@@ -84,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   productDetails: {
     [theme.breakpoints.up("xs")]: {
       width: "90%",
-      marginBottom: '-1rem',
+      marginBottom: "-1rem",
       "& > *": {
         width: "100%",
         marginBottom: "2rem",
@@ -92,13 +84,13 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up("md")]: {
       width: "50%",
-      marginTop: "8%"
+      marginTop: "8%",
     },
   },
   productDescription: {
     [theme.breakpoints.up("md")]: {
       marginLeft: "-85%",
-      width: "185%"
+      width: "185%",
     },
   },
   root: {
@@ -137,7 +129,6 @@ function AddProduct(props) {
     shortDesc: "",
     description: "",
   });
-  const [expanded, setExpanded] = useState(false);
   const [previewProduct, setPreviewProduct] = useState(false);
 
   const dispatch = useStore((state) => state.dispatch);
@@ -147,9 +138,17 @@ function AddProduct(props) {
 
   const saveProduct = (e) => {
     e.preventDefault();
-    addProductRequest(formData, user.token).then((res) =>
-      dispatch({ type: ADDAPRODUCT, payload: res })
-    );
+    if (
+      formData.name &&
+      formData.price > 0 &&
+      formData.stock > 0 &&
+      formData.shortDesc &&
+      formData.description
+    ) {
+      addProductRequest(formData, user.token)
+        .then((res) => dispatch({ type: ADDAPRODUCT, payload: res }))
+        .then(() => history.push("/products"));
+    }
   };
 
   const handleChange = (e) => {
@@ -158,137 +157,67 @@ function AddProduct(props) {
     setFormData((state) => ({ ...state, [inputName]: inputValue }));
   };
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const setPreview = (e) => {
+    setPreviewProduct(!previewProduct);
   };
+
+  const history = useHistory();
 
   return (
     <>
       {!previewProduct ? (
         <>
           <Card className={classes.addproduct}>
-            <Box className={classes.addProductTitleBox}>
-              <CardContent className={classes.addProductTitleDiv}>
-                <CardHeader title="Add Product" />
-                <CardContent className={classes.addImage}>
-                  <AddCircleIcon className={classes.imageIcon} />
+            <form id="add-product-form" onSubmit={saveProduct}>
+              <Box className={classes.addProductTitleBox}>
+                <CardContent className={classes.addProductTitleDiv}>
+                  <CardHeader title="Add Product" />
+                  <CardContent className={classes.addImage}>
+                    <AddCircleIcon
+                      className={classes.imageIcon}
+                      color="secondary"
+                    />
 
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    Add image
-                  </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Add image
+                    </Typography>
+                  </CardContent>
                 </CardContent>
-              </CardContent>
-              <CardContent className={classes.productDetails}>
-                <TextField
-                  id="filled-basic"
-                  label="Product Name"
-                  variant="outlined"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
 
-                <TextField
-                  id="filled-basic"
-                  label="Product Price"
-                  variant="outlined"
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                />
-                <TextField
-                  id="filled-basic"
-                  label="Stock"
-                  variant="outlined"
-                  type="number"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                />
-                <TextField
-                  className={classes.productDescription}
-                  id="filled-basic"
-                  label="Short Description"
-                  variant="outlined"
-                  name="shortDesc"
-                  value={formData.shortDesc}
-                  onChange={handleChange}
-                />
-                <TextField
-                  className={classes.productDescription}
-                  id="filled-basic"
-                  label="Long Description"
-                  variant="outlined"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                />
-              </CardContent>
-            </Box>
-          </Card>
-        </>
-      ) : (
-        <>
-          <h4>Preview Product</h4>
-          <Card className={classes.root}>
-            <CardHeader
-              avatar={
-                <Avatar aria-label="recipe" className={classes.avatar}>
-                  {formData.name.slice(0, 1).toUpperCase()}
-                </Avatar>
-              }
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={
-                <TextField
-                  id="filled-basic"
-                  label="Product Name"
-                  variant="outlined"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              }
-              subheader={
-                <TextField
-                  id="filled-basic"
-                  label="Product Price"
-                  variant="outlined"
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                />
-              }
-            />
-            <CardMedia
-              className={classes.media}
-              image="/static/images/cards/paella.jpg"
-              alt={formData.shortDesc}
-            />
-            <CardContent>
-              {
-                <TextField
-                  id="filled-basic"
-                  label="Stock"
-                  variant="outlined"
-                  type="number"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                />
-              }
-              <Typography variant="body2" color="textSecondary" component="p">
-                {
+                <CardContent className={classes.productDetails}>
                   <TextField
+                    id="filled-basic"
+                    label="Product Name"
+                    variant="outlined"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+
+                  <TextField
+                    id="filled-basic"
+                    label="Product Price"
+                    variant="outlined"
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    id="filled-basic"
+                    label="Stock"
+                    variant="outlined"
+                    type="number"
+                    name="stock"
+                    value={formData.stock}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    className={classes.productDescription}
                     id="filled-basic"
                     label="Short Description"
                     variant="outlined"
@@ -296,35 +225,67 @@ function AddProduct(props) {
                     value={formData.shortDesc}
                     onChange={handleChange}
                   />
-                }
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="add to cart">
-                <AddShoppingCartIcon />
-              </IconButton>
-              <Typography variant="caption">
-                More about {formData.name}:
-              </Typography>
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded,
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                <Typography paragraph>{formData.description}</Typography>
+                  <TextField
+                    className={classes.productDescription}
+                    id="filled-basic"
+                    label="Long Description"
+                    variant="outlined"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                  />
+                  <Button
+                    className={classes.productDescription}
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    onClick={setPreview}
+                  >
+                    Preview Product
+                  </Button>
+                  <Button
+                    className={classes.productDescription}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Add Product
+                  </Button>
+                </CardContent>
+              </Box>
+            </form>
+          </Card>
+        </>
+      ) : (
+        <>
+          <Card className={classes.addproduct}>
+            <Box className={classes.addProductTitleBox}>
+              <CardContent className={classes.addProductTitleDiv}>
+                <h2>Preview Product</h2>
+
+                <ProductItem product={formData} preview={previewProduct} />
               </CardContent>
-            </Collapse>
+
+              <CardContent className={classes.productDetails}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  onClick={setPreview}
+                >
+                  Continue Editing Product
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  onClick={saveProduct}
+                >
+                  Add Product
+                </Button>
+              </CardContent>
+            </Box>
           </Card>
         </>
       )}

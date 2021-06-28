@@ -28,18 +28,26 @@ function Login(props) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    rememberMe: false,
   });
 
   const handleLogin = (e) => {
     e.preventDefault();
-    loginRequest(formData.email, formData.password).then((res) =>
-      dispatch({ type: LOGIN, payload: res })
-    );
+    loginRequest(formData.email, formData.password).then((res) => {
+      console.log(res);
+      dispatch({ type: LOGIN, payload: res });
+      if (formData.rememberMe) {
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("email", res.email);
+      }
+      localStorage.setItem("rememberMe", formData.rememberMe);
+    });
   };
 
   const handleChange = (e) => {
     const inputName = e.target.name;
-    const inputValue = e.target.value;
+    const inputValue =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setFormData((state) => ({ ...state, [inputName]: inputValue }));
   };
 
@@ -76,14 +84,21 @@ function Login(props) {
           onChange={handleChange}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={
+            <Checkbox
+              value="rememberMe"
+              name="rememberMe"
+              color="primary"
+              onChange={handleChange}
+            />
+          }
           label="Remember me"
         />
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          color="primary"
+          color="secondary"
           className={classes.submit}
         >
           Sign In

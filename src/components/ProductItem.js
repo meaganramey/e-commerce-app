@@ -12,12 +12,16 @@ import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+
+import bags from "../assets/bag.jpeg";
+import shirts from "../assets/shirts.jpeg";
+import shoes from "../assets/shoe.png";
+import shorts from "../assets/shorts.png";
+import temporary from "../assets/temp_image.jpeg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 0,
     paddingTop: "56.25%", // 16:9
+    width: "60%",
+    margin: "0 auto",
   },
   expand: {
     transform: "rotate(0deg)",
@@ -38,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     transform: "rotate(180deg)",
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: theme.palette.secondary.main,
   },
 }));
 
@@ -67,6 +73,26 @@ function ProductItem(props) {
     setExpanded(!expanded);
   };
 
+  let title = product.name.slice(0, 1).toUpperCase() + product.name.slice(1);
+  const lastLetter = product.name.slice(-1);
+  if (lastLetter === "s") {
+    title = product.name.slice(0, 1).toUpperCase() + product.name.slice(1, -1);
+  }
+  let photo;
+  if (product.name === "bags") {
+    photo = bags;
+  } else if (product.name === "shirts") {
+    photo = shirts;
+  } else if (product.name === "shoes") {
+    photo = shoes;
+  } else if (product.name === "shorts") {
+    photo = shorts;
+  } else {
+    photo = temporary;
+  }
+
+  const preview = props.preview ? props.preview : false;
+
   return (
     <>
       <Card className={classes.root}>
@@ -81,15 +107,12 @@ function ProductItem(props) {
               <MoreVertIcon />
             </IconButton>
           }
-          title={`${product.name.slice(0, 1).toUpperCase()}${product.name.slice(
-            1,
-            -1
-          )}`}
+          title={title}
           subheader={product.price}
         />
         <CardMedia
           className={classes.media}
-          image="/static/images/cards/paella.jpg"
+          image={photo}
           alt={product.shortDesc}
         />
         <CardContent>
@@ -103,11 +126,12 @@ function ProductItem(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites" color="secondary">
             <FavoriteIcon />
           </IconButton>
           <IconButton
             aria-label="add to cart"
+            disabled={preview}
             onClick={(e) =>
               addToCart({
                 id: product.name,
@@ -118,7 +142,7 @@ function ProductItem(props) {
           >
             <AddShoppingCartIcon />
           </IconButton>
-            <Typography variant="caption">More about {product.name}:</Typography>
+          <Typography variant="caption">More about {product.name}:</Typography>
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,

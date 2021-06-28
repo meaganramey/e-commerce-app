@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -24,29 +24,38 @@ const useStyles = makeStyles((theme) => ({
 function SignUp(props) {
   const classes = useStyles();
 
-  const history = useHistory()
+  const history = useHistory();
 
   const dispatch = useStore((state) => state.dispatch);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    rememberMe: false,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     signUpRequest(formData.email, formData.password).then((res) => {
       dispatch({ type: SIGNUP, payload: res });
-      if (res.statusCode === 200){
-        loginRequest(formData.email, formData.password).then((res) => {
-          dispatch({ type: LOGIN, payload: res})
-        }).then(() => history.push('/'))
+      if (res.statusCode === 200) {
+        loginRequest(formData.email, formData.password)
+          .then((res) => {
+            dispatch({ type: LOGIN, payload: res });
+            if (formData.rememberMe) {
+              localStorage.setItem("token", res.token);
+              localStorage.setItem("email", res.email);
+            }
+            localStorage.setItem("rememberMe", formData.rememberMe);
+          })
+          .then(() => history.push("/"));
       }
     });
   };
 
   const handleChange = (e) => {
     const inputName = e.target.name;
-    const inputValue = e.target.value;
+    const inputValue =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setFormData((state) => ({ ...state, [inputName]: inputValue }));
   };
 
@@ -85,7 +94,14 @@ function SignUp(props) {
           onChange={handleChange}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={
+            <Checkbox
+              value="rememberMe"
+              name="rememberMe"
+              color="primary"
+              onChange={handleChange}
+            />
+          }
           label="Remember me"
         />
         <Button
