@@ -4,7 +4,7 @@ This project is a small scale e-commerce app with full authentication and sign-u
 
 ## View Site: 
 
-
+[e-commerce create react app](https://meaganramey.github.io/e-commerce-app/)
 
 ## Available Scripts
 
