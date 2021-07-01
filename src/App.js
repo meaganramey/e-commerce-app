@@ -7,10 +7,14 @@ import Home from "./views/Home";
 import ProductList from "./views/ProductList";
 import AddProduct from "./views/AddProduct";
 import AuthView from "./views/Auth";
+import NotFound from "./views/NotFound"
 import { LOGIN, useStore } from "./store/store";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+
+import { ToastContainer, Slide } from "react-toastify";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,7 +67,22 @@ function App(props) {
         <Route exact path="/add-product" component={AddProduct} />
         <Route path="/login" component={AuthView} />
         <Route path="/signup" component={AuthView} />
+        <Route path="*" component={NotFound} />
       </Switch>
+
+      <ToastContainer
+        bodyClassName="success"
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </div>
   );
 }

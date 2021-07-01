@@ -1,6 +1,9 @@
 import create from "zustand";
 import { devtools, redux } from "zustand/middleware";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // define the store's initial state
 const initialState = {
   user: { token: "" },
@@ -41,3 +44,28 @@ const reducer = (state, action) => {
 
 // create useStore hook
 export const useStore = create(devtools(redux(reducer, initialState)));
+
+// Toasts :
+export const toastifyMessage = (message, type, styles = {}) => {
+  switch (type) {
+    case "success":
+      toast.success(message);
+      break;
+
+    case "error":
+      toast.error(message);
+      break;
+
+    case "info":
+      toast.info(message);
+      break;
+
+    case "warn":
+      toast.warn(message);
+      break;
+
+    default:
+      toast(message);
+      break;
+  }
+};

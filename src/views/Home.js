@@ -1,8 +1,8 @@
 import React from "react";
+import { Redirect } from "react-router";
 
 import { useStore } from "../store/store";
 import AuthView from "./Auth";
-import Homepage from '../components/Homepage'
 
 function Home(props) {
   const user = useStore((state) => state.user);
@@ -15,7 +15,7 @@ function Home(props) {
         </>
       ) : (
         <>
-          <Homepage />
+          <Redirect to="/products" />
         </>
       )}
     </>
