@@ -6,6 +6,14 @@ This project is a small scale e-commerce app with full authentication and sign-u
 
 [e-commerce create react app](https://meaganramey.github.io/e-commerce-app/)
 
+Login as a shopper: 
+    email: regular@example.com
+    password: password
+
+Login as a seller / shopper: 
+    email: admin@example.com
+    password: password
+
 ## Available Scripts
 
 Want to experice the code first hand? Clone down the repository.

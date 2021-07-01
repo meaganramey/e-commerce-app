@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary,
+    // color: theme.palette.secondary.main,
     "& > * + *": {
       marginLeft: theme.spacing(2),
     },
@@ -152,9 +152,9 @@ function NavBar(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose} component={RouterLink} to="/">
+                {/* <MenuItem onClick={handleClose} component={RouterLink} to="/">
                   Home
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem
                   onClick={handleClose}
                   component={RouterLink}
@@ -162,14 +162,15 @@ function NavBar(props) {
                 >
                   Products
                 </MenuItem>
-                <MenuItem
-                  onClick={handleClose}
-                  component={RouterLink}
-                  to="/add-product"
-                >
-                  Add Product
-                </MenuItem>
-
+                {user.admin && (
+                  <MenuItem
+                    onClick={handleClose}
+                    component={RouterLink}
+                    to="/add-product"
+                  >
+                    Add Product
+                  </MenuItem>
+                )}
                 <MenuItem
                   onClick={handleClose}
                   component={RouterLink}

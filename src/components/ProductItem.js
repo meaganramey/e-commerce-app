@@ -1,5 +1,5 @@
 import React from "react";
-import { UPDATECART, useStore } from "../store/store";
+import { UPDATECART, useStore, toastifyMessage } from "../store/store";
 
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -63,8 +63,16 @@ function ProductItem(props) {
     }
     if (cartCopy[product.id].amount > product.product.stock) {
       cartCopy[product.id].amount = product.product.stock;
+      toastifyMessage(
+        `${product.product.name} has already been added to your cart, and is now out of stock.`,
+        "error"
+      );
     }
     dispatch({ type: UPDATECART, payload: cartCopy });
+    toastifyMessage(
+      `${product.product.name} has been added to your cart.`,
+      "success"
+    );
   };
 
   const [expanded, setExpanded] = React.useState(false);

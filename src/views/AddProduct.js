@@ -122,6 +122,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AddProduct(props) {
+  const user = useStore((state) => state.user);
+  const dispatch = useStore((state) => state.dispatch);
+
+  const history = useHistory();
+  if (!user.admin) {
+    history.push("/products");
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     price: 0,
@@ -130,9 +138,6 @@ function AddProduct(props) {
     description: "",
   });
   const [previewProduct, setPreviewProduct] = useState(false);
-
-  const dispatch = useStore((state) => state.dispatch);
-  const user = useStore((state) => state.user);
 
   const classes = useStyles();
 
@@ -160,8 +165,6 @@ function AddProduct(props) {
   const setPreview = (e) => {
     setPreviewProduct(!previewProduct);
   };
-
-  const history = useHistory();
 
   return (
     <>
